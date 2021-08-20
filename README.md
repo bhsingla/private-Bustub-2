@@ -13,7 +13,7 @@ The following instructions will create a private BusTub that you can use for you
 1. Go to [https://github.com/new](https://github.com/new) to create a new repo under your account. Pick a name (e.g. `private-bustub`) and make sure it is you select it as **private**.
 2. On your development machine, clone the public BusTub:
    ```
-   $ git clone --depth 1 https://github.com/asaashraf/bustub.git public-bustub
+   $ git clone https://github.com/asaashraf/bustub.git public-bustub
    ```
 3. You next need to [mirror](https://git-scm.com/docs/git-push#Documentation/git-push.txt---mirror) the public BusTub repo into your own private BusTub repo. Suppose your GitHub name is `student` and your repo name is `private-bustub`, you will execute the following commands:
    ```
