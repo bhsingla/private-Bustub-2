@@ -31,7 +31,7 @@ The following instructions will create a private BusTub that you can use for you
    ```
    $ git clone git@github.com:student/private-bustub.git
    ```
-5. Add the public BusTub as a remote source. This will allow you to retrieve changes from the CMU-DB repository during the semester:
+5. Add the public BusTub as a remote source. This will allow you to retrieve changes from the aashraf bustub repository during the semester:
    ```
    $ git remote add public https://github.com/asaashraf/bustub.git
    ```
