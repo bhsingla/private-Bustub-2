@@ -20,7 +20,7 @@ The following instructions will create a private BusTub that you can use for you
    $ cd public-bustub
    $ git push --mirror git@github.com:student/private-bustub.git
    Note: You can set up an ssh key via the command ssh-keygen -t rsa -b 4096 -C "youremail@email.com" and then paste the resulting key into GitHub under the Settings menu.
-         Alternatively, you can avoid creating an SSH key by using git push -mirror https://github.com/asaashraf/private-bustub.git
+         Alternatively, you can avoid creating an SSH key by using git push --mirror https://github.com/asaashraf/private-bustub.git
    ```
    This copies everything in the public BusTub repo into your own private repo. You can now delete this bustub directory:
    ```
