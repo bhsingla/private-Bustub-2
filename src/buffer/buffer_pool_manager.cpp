@@ -67,18 +67,21 @@ Page *BufferPoolManager::FetchPageImpl(page_id_t page_id) {
     if(!replace) return nullptr;
     size_t t = static_cast<size_t>(frameID);
     p = &pages_[t];
-    if((p) != nullptr){
+    page_table_.erase((*p).GetPageId());
+    /*if((p) != nullptr){
       if(p->IsDirty()){
       this->FlushPageImpl((*p).GetPageId());
       page_table_.erase((*p).GetPageId());
       }
-   }
+   }*/
 }
   p->page_id_ = page_id;
   p->pin_count_++;
   page_table_[page_id] = frameID;
   replacer_->Pin(frameID);
-
+  cout<<"Page content: "<<p->GetData()<<"\n";
+  disk_manager_->ReadPage(page_id, p->GetData());
+  cout<<"Page data post reading: "<<p->GetData()<<"\n";
   return p;
 }
 
@@ -87,9 +90,12 @@ bool BufferPoolManager::UnpinPageImpl(page_id_t page_id, bool is_dirty) {
     frame_id_t frameID = page_table_.at(page_id);
     size_t t = static_cast<size_t>(frameID);
     Page* p = &pages_[t];
+    if(p->pin_count_ == 0)  return false;
     p->pin_count_--;
-    if(is_dirty)  p->is_dirty_ = is_dirty;
+    //if(is_dirty)  p->is_dirty_ = is_dirty;
+    p->is_dirty_ = is_dirty;
     if(p->pin_count_ == 0) replacer_->Unpin(page_id);
+    this->FlushPage(page_id);
     //page_table_.erase(page_id);
     return true;
   }
@@ -102,7 +108,10 @@ bool BufferPoolManager::FlushPageImpl(page_id_t page_id) {
     frame_id_t frameID = page_table_.at(page_id);
     size_t t = static_cast<size_t>(frameID);
     Page* p = &pages_[t];
-    if(p->IsDirty())  (*disk_manager_).WritePage(page_id, p->data_);
+    if(p->IsDirty()){
+      (*disk_manager_).WritePage(page_id, p->data_);  
+      cout<<"Writted data to disk...";
+    }  
     //page_table_.erase(page_id);
     return true;
   } 
