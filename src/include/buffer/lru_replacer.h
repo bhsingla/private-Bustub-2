@@ -47,6 +47,7 @@ class LRUReplacer : public Replacer {
 
  private:
   // TODO(student): implement me!
+  std::list<frame_id_t> frames;
 };
 
 }  // namespace bustub
