@@ -11,22 +11,16 @@
 //===----------------------------------------------------------------------===//
 
 #include "buffer/lru_replacer.h"
-#include "iostream"
-using namespace std;
 
 namespace bustub {
 
-LRUReplacer::LRUReplacer(size_t num_pages){
-    //frames.resize(num_pages);
-    //cout<<"Frames size: "<<this->Size()<<"\n";
-}
+LRUReplacer::LRUReplacer(size_t num_pages){}
 
 LRUReplacer::~LRUReplacer() = default;
 
 bool LRUReplacer::Victim(frame_id_t *frame_id) { 
     if(!frames.empty()){
         *frame_id = frames.front();
-        //frame_id = &framdeID;
         frames.remove(*frame_id);
         return true;
     }
@@ -42,7 +36,6 @@ void LRUReplacer::Unpin(frame_id_t frame_id) {
     if(!list_contains_frame){
         frames.push_back(frame_id);
     }
-    return;
 }
 
 size_t LRUReplacer::Size() { 

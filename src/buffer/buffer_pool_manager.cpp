@@ -11,10 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "buffer/buffer_pool_manager.h"
-#include "iostream"
-using namespace std;
-#include <list>
-#include <unordered_map>
 
 namespace bustub {
 
@@ -62,7 +58,9 @@ Page *BufferPoolManager::FetchPageImpl(page_id_t page_id) {
     p = &pages_[frame_id];
   }else if (replacer_->Victim(&frame_id)) {
     p = &pages_[frame_id];
-    if (p->IsDirty()) disk_manager_->WritePage(p->page_id_, p->GetData());
+    if (p->IsDirty()){ 
+      disk_manager_->WritePage(p->page_id_, p->GetData());
+    }
     page_table_.erase(p->GetPageId());
   } else{  
     latch_.unlock();
@@ -84,12 +82,16 @@ bool BufferPoolManager::UnpinPageImpl(page_id_t page_id, bool is_dirty) {
   if(!(page_table_.find(page_id) == page_table_.cend())){
     frame_id = page_table_.at(page_id);
     Page* p = &pages_[frame_id];
-    if (p->pin_count_ == 0) return false;
+    if (p->pin_count_ == 0){
+      return false;
+    }
     p->pin_count_--;
     p->is_dirty_ = is_dirty;
     if (p->pin_count_ == 0) {
       replacer_->Unpin(frame_id);
-      if (p->IsDirty()) disk_manager_->WritePage(page_id, p->GetData());
+      if (p->IsDirty()){
+        disk_manager_->WritePage(page_id, p->GetData());
+      }
     }
     latch_.unlock();
     return true;
@@ -104,7 +106,9 @@ bool BufferPoolManager::FlushPageImpl(page_id_t page_id) {
   if(!(page_table_.find(page_id) == page_table_.cend())){
     frame_id_t frame_id = page_table_.at(page_id);
     Page* p = &pages_[frame_id];
-    if (p->IsDirty()) disk_manager_->WritePage(page_id, p->GetData());
+    if (p->IsDirty()){
+      disk_manager_->WritePage(page_id, p->GetData());
+    }
     p->is_dirty_ = false;
   }
   latch_.unlock();
@@ -119,7 +123,9 @@ Page *BufferPoolManager::NewPageImpl(page_id_t *page_id) {
   // 4.   Set the page ID output parameter. Return a pointer to P.
   latch_.lock();
   for(size_t i = 0; i < pool_size_; ++i){
-    if(pages_[i].GetPinCount() == 0) break;
+    if(pages_[i].GetPinCount() == 0){
+      break;
+    }
     if(i == pool_size_-1){
       latch_.unlock();
       return nullptr;
@@ -131,7 +137,9 @@ Page *BufferPoolManager::NewPageImpl(page_id_t *page_id) {
     frame_id = free_list_.front();
     free_list_.pop_front();
   }else if (replacer_->Victim(&frame_id)) {
-    if (pages_[frame_id].IsDirty()) disk_manager_->WritePage(pages_[frame_id].page_id_, pages_[frame_id].GetData());
+    if (pages_[frame_id].IsDirty()){
+      disk_manager_->WritePage(pages_[frame_id].page_id_, pages_[frame_id].GetData());
+    }
     page_table_.erase(pages_[frame_id].page_id_);
     pages_[frame_id].is_dirty_ = false;
   } else{
