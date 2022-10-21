@@ -46,8 +46,7 @@ class BPlusTreeInternalPage : public BPlusTreePage {
   ValueType Lookup(const KeyType &key, const KeyComparator &comparator) const;
   void PopulateNewRoot(const ValueType &old_value, const KeyType &new_key, const ValueType &new_value);
   int InsertNodeAfter(const ValueType &old_value, const KeyType &new_key, const ValueType &new_value);
-  void Remove(int index);
-  ValueType RemoveAndReturnOnlyChild();
+  int Remove(int index);
 
   // Split and Merge utility methods
   void MoveAllTo(BPlusTreeInternalPage *recipient, const KeyType &middle_key, BufferPoolManager *buffer_pool_manager);

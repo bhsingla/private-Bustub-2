@@ -22,9 +22,8 @@ namespace bustub {
 INDEX_TEMPLATE_ARGUMENTS
 class IndexIterator {
  public:
-  // you may define your own constructor based on your member variables
-  IndexIterator();
-  ~IndexIterator();
+  IndexIterator(BufferPoolManager *bpm, page_id_t page_id, int i);
+  ~IndexIterator() = default;
 
   bool isEnd();
 
@@ -32,12 +31,14 @@ class IndexIterator {
 
   IndexIterator &operator++();
 
-  bool operator==(const IndexIterator &itr) const { throw std::runtime_error("unimplemented"); }
+  bool operator==(const IndexIterator &itr) const;
 
-  bool operator!=(const IndexIterator &itr) const { throw std::runtime_error("unimplemented"); }
+  bool operator!=(const IndexIterator &itr) const;
 
  private:
-  // add your own private member variables here
+  page_id_t current_page_id_;
+  BufferPoolManager *buffer_pool_manager_;
+  int index_;
 };
 
 }  // namespace bustub
