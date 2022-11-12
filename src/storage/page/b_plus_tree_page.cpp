@@ -10,6 +10,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "storage/page/b_plus_tree_page.h"
+#include "math.h"
 
 namespace bustub {
 
@@ -22,7 +23,9 @@ bool BPlusTreePage::IsLeafPage() const {
     //return false;
 }
 bool BPlusTreePage::IsRootPage() const { 
-    return false;
+    //If node doesnt have a parent page, its root node
+    return (parent_page_id_ == INVALID_PAGE_ID);
+    //return false;
 }
 void BPlusTreePage::SetPageType(IndexPageType page_type) {
     page_type_ = page_type;
@@ -58,7 +61,7 @@ void BPlusTreePage::SetMaxSize(int size) {
  * Helper method to get min page size
  * Generally, min page size == max page size / 2
  */
-int BPlusTreePage::GetMinSize() const { return 0; }
+int BPlusTreePage::GetMinSize() const { return ceil(max_size_/2); }
 
 /*
  * Helper methods to get/set parent page id
